@@ -12,7 +12,7 @@ var upload = multer(
             fieldNameSize: 999999999,
             fieldSize: 999999999
         },
-        dest: '/' 
+        dest: '/'
     });
 
 app.use(connect.logger('dev'));
@@ -30,8 +30,8 @@ app.post('/upload', upload.any(), function(req, res){
    //console.log(req.files);
 
     var tmp_path = req.files[0].path;
-	console.log(tmp_path);
-    var target_path = '/tmp/test/' + req.files[0].originalname;
+		console.log(tmp_path);
+    var target_path = './' + req.files[0].originalname;
 
     var src = fs.createReadStream(tmp_path);
     var dest = fs.createWriteStream(target_path);
@@ -42,10 +42,10 @@ app.post('/upload', upload.any(), function(req, res){
     PythonShell.run('ML.py',options, function(err, results){
       if(err){
 	res.json({'error': 'error'});
-        throw err;
+				console.log(err)
       }else {
 	console.log(results);
-	res.json({'num': 1, 'tag': results[0], 'probability': results[1]});
+	res.json({'uri':req.files[0].fieldname, 'num': 1, 'tag': results[0], 'probability': results[1]});
       }
       fs.unlink(target_path, function (err){
         if (err) throw err;

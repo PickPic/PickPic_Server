@@ -7,7 +7,7 @@ from __future__ import division
 from __future__ import print_function
 
 # 필요한 라이브러리들을 임포트
-import os.path
+import os
 import re
 import sys
 import tarfile
@@ -16,6 +16,7 @@ import numpy as np
 from six.moves import urllib
 import tensorflow as tf
 
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 FLAGS = tf.app.flags.FLAGS
 
 # classify_image_graph_def.pb:
@@ -129,7 +130,7 @@ def run_inference_on_image(image):
 
   with tf.Session() as sess:
     # 몇가지 유용한 텐서들:
-    # 'softmax:0': 1000개의 레이블에 대한 정규화된 예측결과값(normalized prediction)을 포함하고 있는 텐서   
+    # 'softmax:0': 1000개의 레이블에 대한 정규화된 예측결과값(normalized prediction)을 포함하고 있는 텐서
     # 'pool_3:0': 2048개의 이미지에 대한 float 묘사를 포함하고 있는 next-to-last layer를 포함하고 있는 텐서
     # 'DecodeJpeg/contents:0': 제공된 이미지의 JPEG 인코딩 문자를 포함하고 있는 텐서
 
@@ -160,7 +161,7 @@ def maybe_download_and_extract():
   filepath = os.path.join(dest_directory, filename)
   # added by jh
   #print("filepath: ")
-  #print(filepath)  
+  #print(filepath)
   if not os.path.exists(filepath):
     def _progress(count, block_size, total_size):
       sys.stdout.write('\r>> Downloading %s %.1f%%' % (
