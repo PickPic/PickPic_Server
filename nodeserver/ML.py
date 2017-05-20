@@ -7,7 +7,7 @@ from __future__ import division
 from __future__ import print_function
 
 # 필요한 라이브러리들을 임포트
-import os.path
+import os
 import re
 import sys
 import tarfile
@@ -15,6 +15,8 @@ import tarfile
 import numpy as np
 from six.moves import urllib
 import tensorflow as tf
+
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' 
 
 FLAGS = tf.app.flags.FLAGS
 

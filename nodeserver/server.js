@@ -45,7 +45,7 @@ app.post('/upload', upload.any(), function(req, res){
       console.log("done");
       if(err){
 	res.json({'error': 'error'});
-        throw err;
+	console.log(err) 
       }else {
 	console.log(index + results);
 	result['tag'+result['num']] = results[0];
@@ -54,11 +54,11 @@ app.post('/upload', upload.any(), function(req, res){
     	res.json(result);
       }
       fs.unlink(target_path, function (err){
-        if (err) throw err;
+        if (err) console.log(err + ' : ' + target_path);
         else console.log('successfully deleted');
       });
       fs.unlink(tmp_path, function (err){
-        if (err) throw err;
+        if (err) console.log(err + ' : ' + tmp_path);
         else console.log('successfully deleted');
       });
     });
