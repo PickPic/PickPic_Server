@@ -1,6 +1,5 @@
 var fs = require('fs');
 
-var queue = require('express-queue');
 var express = require('express');
 var connect = require('connect');
 var multer = require('multer');
@@ -16,7 +15,6 @@ var upload = multer(
         dest: '/' 
     });
 
-app.use('/upload', queue({activeLimit : 10}));
 app.use(connect.logger('dev'));
 app.get('/', function(req, res){
     res.send(
@@ -26,7 +24,6 @@ app.get('/', function(req, res){
         '</form>'
     );
 });
-
 app.post('/upload', upload.any(), function(req, res){
     index++;
    //console.log(req.files);
@@ -62,7 +59,6 @@ app.post('/upload', upload.any(), function(req, res){
         else console.log('successfully deleted');
       });
     });
-    console.log("done");
 });
 
 app.get('/info', function(req, res){

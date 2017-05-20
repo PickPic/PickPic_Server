@@ -123,11 +123,16 @@ def run_inference_on_image(image):
   if not tf.gfile.Exists(image):
     tf.logging.fatal('File does not exist %s', image)
   image_data = tf.gfile.FastGFile(image, 'rb').read()
-
-  # 저장된 GraphDef로부터 그래프 생성
+    # 저장된 GraphDef로부터 그래프 생성
  # create_graph()
 
   with tf.Session() as sess:
+    if '.png' in image:
+      _png_data = tf.placeholder(dtype=tf.string)
+      image = tf.image.decode_png(_png_data, channels=3)
+      _png_to_jpeg = tf.image.encode_jpeg(image, format='rgb', quality=100)
+      image_data = sess.run(_png_to_jpeg ,feed_dict={_png_data: image_data})
+
     # 몇가지 유용한 텐서들:
     # 'softmax:0': 1000개의 레이블에 대한 정규화된 예측결과값(normalized prediction)을 포함하고 있는 텐서   
     # 'pool_3:0': 2048개의 이미지에 대한 float 묘사를 포함하고 있는 next-to-last layer를 포함하고 있는 텐서
@@ -173,7 +178,7 @@ def maybe_download_and_extract():
   tarfile.open(filepath, 'r:gz').extractall(dest_directory)
 def main(argv="~/funny_cat.jpg"):
   # Inception-v3 모델을 다운로드하고 압축을 푼다.
-#  maybe_download_and_extract()
+  #maybe_download_and_extract()
   # 인풋으로 입력할 이미지를 설정한다.
   image = (FLAGS.image_file if FLAGS.image_file else
            os.path.join(FLAGS.model_dir, 'cropped_panda.jpg'))
