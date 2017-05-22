@@ -5,6 +5,11 @@ var express = require('express');
 var connect = require('connect');
 var multer = require('multer');
 var PythonShell = require('python-shell');
+var pathF = require('path');
+
+var namer = require('color-namer')
+var color   = require('dominant-color');
+
 var index = 0;
 var app = express();
 var upload = multer(
@@ -17,7 +22,7 @@ var upload = multer(
     });
 
 app.use('/upload', queue({activeLimit : 10}));
-app.use(connect.logger('dev'));
+app.use(require('connect-logger')({/* options */}));//app.use(connect.logger('dev'));
 app.get('/', function(req, res){
     res.send(
         '<form action="/upload" method="post" enctype="multipart/form-data">'+
@@ -29,7 +34,7 @@ app.get('/', function(req, res){
 
 app.post('/upload', upload.any(), function(req, res){
     index++;
-   //console.log(req.files);
+    //console.log(req.files);
 
     var tmp_path = req.files[0].path;
     var target_path = './' + req.files[0].originalname;
@@ -37,32 +42,49 @@ app.post('/upload', upload.any(), function(req, res){
     var src = fs.createReadStream(tmp_path);
     var dest = fs.createWriteStream(target_path);
     src.pipe(dest);
-    console.log(index + 'saved file : ' + target_path)
+    //console.log(index + ' saved file : ' + target_path)
     var options = {mode: 'text',pythonPath: '',pythonOptions: ['-u'],
                    scriptPath: '',args: [target_path]};
     var result = {'num' : 0, 'path' : req.files[0].fieldname};
+    var ext = pathF.extname(req.files[0].originalname);
+    if(ext == '.jpg' || ext == '.jpeg' || ext == '.png'){
     PythonShell.run('ML.py',options, function(err, results){
-      console.log("done");
       if(err){
 	res.json({'error': 'error'});
 	console.log(err) 
       }else {
-	console.log(index + results);
+	//console.log(results);
 	result['tag'+result['num']] = results[0];
 	result['probability' + result['num']] = results[1];
 	result['num']++;
-    	res.json(result);
+	color(target_path, function(err, color){
+		//console.log(namer('#'+color).basic)
+		if(err){
+			console.log(err);
+		}
+		if(!err){
+			result['tag'+result['num']] = (namer('#'+color).basic)[0].name;
+			result['num']++;
+		}
+    		res.json(result);
+		fs.unlink(target_path, function (err){
+        		if (err) console.log(err + ' : ' + target_path);
+        		//else console.log('successfully deleted');
+      		});
+      		fs.unlink(tmp_path, function (err){
+        		if (err) console.log(err + ' : ' + tmp_path);
+        		//else console.log('successfully deleted');
+      		});
+    		//console.log("done");
+	});
+
       }
-      fs.unlink(target_path, function (err){
-        if (err) console.log(err + ' : ' + target_path);
-        else console.log('successfully deleted');
-      });
-      fs.unlink(tmp_path, function (err){
-        if (err) console.log(err + ' : ' + tmp_path);
-        else console.log('successfully deleted');
-      });
+      
     });
-    console.log("done");
+    }
+    else{
+	res.json({'error': 'error'});
+    }
 });
 
 app.get('/info', function(req, res){
