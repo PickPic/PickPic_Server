@@ -10,6 +10,8 @@ var pathF = require('path');
 var namer = require('color-namer')
 var color   = require('dominant-color');
 
+var textract = require('textract');
+
 var index = 0;
 var app = express();
 var upload = multer(
@@ -47,44 +49,54 @@ app.post('/upload', upload.any(), function(req, res){
                    scriptPath: '',args: [target_path]};
     var result = {'num' : 0, 'path' : req.files[0].fieldname};
     var ext = pathF.extname(req.files[0].originalname);
-    if(ext == '.jpg' || ext == '.jpeg' || ext == '.png'){
     PythonShell.run('ML.py',options, function(err, results){
-      if(err){
-	res.json({'error': 'error'});
-	console.log(err) 
-      }else {
-	//console.log(results);
-	result['tag'+result['num']] = results[0];
-	result['probability' + result['num']] = results[1];
-	result['num']++;
+        if(err){
+	    res.json({'error': 'error'});
+	    console.log(err) 
+        }else {
+	    //console.log(results);
+	    result['tag'+result['num']] = results[0];
+	    result['probability' + result['num']] = results[1];
+	    result['num']++;
+	}
 	color(target_path, function(err, color){
-		//console.log(namer('#'+color).basic)
-		if(err){
-			console.log(err);
-		}
-		if(!err){
-			result['tag'+result['num']] = (namer('#'+color).basic)[0].name;
+	    //console.log(namer('#'+color).basic)
+	    if(err){
+	        console.log(err);
+	    }
+	    else{
+	        result['tag'+result['num']] = (namer('#'+color).basic)[0].name;
+	        result['num']++;
+	    }
+	    console.log("color done")
+	    textract.fromFileWithPath(target_path, function(error,text){
+	        if(err){
+		    console.log(err);
+	        }
+	        else{
+        	    //console.log(text)
+        	    var a = new String(text).trim()
+		    if(a.length != 0){
+			result['tag'+result['num']] = a;
 			result['num']++;
-		}
-    		res.json(result);
-		fs.unlink(target_path, function (err){
-        		if (err) console.log(err + ' : ' + target_path);
-        		//else console.log('successfully deleted');
-      		});
-      		fs.unlink(tmp_path, function (err){
-        		if (err) console.log(err + ' : ' + tmp_path);
-        		//else console.log('successfully deleted');
-      		});
-    		//console.log("done");
-	});
-
-      }
-      
+		    }
+		    else{
+			//console.log("no text")
+		    }
+	        }
+    	        res.json(result);
+	        fs.unlink(target_path, function (err){
+        	    if (err) console.log(err + ' : ' + target_path);
+        	    //else console.log('successfully deleted');
+      	        });
+      	        fs.unlink(tmp_path, function (err){
+                    if (err) console.log(err + ' : ' + tmp_path);
+        	    //else console.log('successfully deleted');
+      	        });
+    	        //console.log("done");
+	    });
+        });
     });
-    }
-    else{
-	res.json({'error': 'error'});
-    }
 });
 
 app.get('/info', function(req, res){
