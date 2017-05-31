@@ -18,7 +18,10 @@ To extract text from image, so you need to set up tesseract-ocr.
     sudo apt-get install tesseract-ocr
     sudo apt-get install tesseract-ocr-eng
 
-*if you want detect more language from image,then see "https://ubuntu.flowconsult.at/linux/ocr-tesseract-text-recognition-ubuntu-14-04/" and "https://github.com/tesseract-ocr/langdata"
+*if you want detect more language from image, then
+
+see "https://ubuntu.flowconsult.at/linux/ocr-tesseract-text-recognition-ubuntu-14-04/" and "https://github.com/tesseract-ocr/langdata"
+
 *if you are not linux, then see "https://github.com/tesseract-ocr/tesseract/wiki")
 
 ## 4. set up modules to node js
