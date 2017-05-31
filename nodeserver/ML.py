@@ -129,7 +129,7 @@ def run_inference_on_image(image):
  # create_graph()
 
   with tf.Session() as sess:
-    if '.png' in image:
+    if '.png' in image or '.PNG' in image:
       _png_data = tf.placeholder(dtype=tf.string)
       image = tf.image.decode_png(_png_data, channels=3)
       _png_to_jpeg = tf.image.encode_jpeg(image, format='rgb', quality=100)

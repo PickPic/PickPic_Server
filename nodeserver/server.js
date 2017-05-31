@@ -23,7 +23,7 @@ var upload = multer(
         dest: '/' 
     });
 
-app.use('/upload', queue({activeLimit : 10}));
+//app.use('/upload', queue({activeLimit : 10}));
 app.use(require('connect-logger')({/* options */}));//app.use(connect.logger('dev'));
 app.get('/', function(req, res){
     res.send(
@@ -49,10 +49,10 @@ app.post('/upload', upload.any(), function(req, res){
                    scriptPath: '',args: [target_path]};
     var result = {'num' : 0, 'path' : req.files[0].fieldname};
     var ext = pathF.extname(req.files[0].originalname);
+    if(ext == '.jpg' || ext == '.jpeg' || ext == '.png'){
     PythonShell.run('ML.py',options, function(err, results){
         if(err){
-	    res.json({'error': 'error'});
-	    console.log(err) 
+	    console.log(err)
         }else {
 	    //console.log(results);
 	    result['tag'+result['num']] = results[0];
@@ -65,10 +65,10 @@ app.post('/upload', upload.any(), function(req, res){
 	        console.log(err);
 	    }
 	    else{
-	        result['tag'+result['num']] = (namer('#'+color).basic)[0].name;
+	        result['tag'+result['num']] = (namer('#'+color).html)[0].name + " color";
 	        result['num']++;
 	    }
-	    console.log("color done")
+	    //console.log("color done")
 	    textract.fromFileWithPath(target_path, function(error,text){
 	        if(err){
 		    console.log(err);
@@ -97,6 +97,10 @@ app.post('/upload', upload.any(), function(req, res){
 	    });
         });
     });
+    }
+    else{
+        res.json({'error': 'error'});
+    }
 });
 
 app.get('/info', function(req, res){
