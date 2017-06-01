@@ -1,4 +1,5 @@
 # PickPic_Server
+    The AutoTagging Server with node js
 
 # Introduce
 
@@ -47,6 +48,9 @@ see "https://ubuntu.flowconsult.at/linux/ocr-tesseract-text-recognition-ubuntu-1
 PickPic_Server use variable modules for ndoe js, so you need to set up modules for nodejs.
     
     npm install
+
+# PickPic Client
+    If you want use PickPic Client, then come with "https://github.com/PickPic/PickPic_Client"
 
 #	run server
 
