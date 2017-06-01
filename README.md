@@ -4,6 +4,12 @@
 
 We also support Windows OS, but we recommend Ubuntu OS.
 
+## 0. get PickPic_Server source code
+
+Click the download button above to download it or type the command below
+        
+        git clone https://github.com/PickPic/PickPic_Server.git
+
 ## 1. set up python
 PickPic_Server use Tensorflow for Python, so you need to set up python and Tensorflow for python.
 
