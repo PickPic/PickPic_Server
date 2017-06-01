@@ -31,4 +31,4 @@ PickPic_Server use variable modules for ndoe js, so you need to set up modules f
 
 #	run server
 
-    Enter “node server.js” to execute server
+    Enter “sudo node server.js” to execute server
