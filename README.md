@@ -8,7 +8,7 @@ You need to send the image in form-data format to the 8080 port of /upload in po
 
 It analyzes objects, dominant color and text, and makes them into tags.
 
-PickPic Server use Inception V3 as object recognition model that trained for the ImageNet Large Visual Recognition Challenge using the data from 2012. 
+PickPic Server use Inception V3 as object recognition model that trained for the ImageNet Large Visual Recognition Challenge using the data from 2012. (https://goo.gl/U8QG8m)
 
 # set up
 
