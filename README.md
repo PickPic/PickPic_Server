@@ -1,5 +1,10 @@
 # PickPic_Server
+<p align="left">
+  <img src="https://github.com/PickPic/PickPic_Client/blob/backEnd/app/src/main/res/mipmap-xhdpi/icon.png" width="350"/>
+</p>
+
     The AutoTagging Server with node js
+
 
 # Introduce
 
