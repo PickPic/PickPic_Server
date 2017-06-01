@@ -1,5 +1,15 @@
 # PickPic_Server
 
+# Introduce
+
+PickPic Server is a server that analyzes images and returns tags.
+
+You need to send the image in form-data format to the 8080 port of /upload in post format.
+
+It analyzes objects, dominant color and text, and makes them into tags.
+
+PickPic Server use Inception V3 as object recognition model that trained for the ImageNet Large Visual Recognition Challenge using the data from 2012. 
+
 # set up
 
 We also support Windows OS, but we recommend Ubuntu OS.
