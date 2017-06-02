@@ -52,6 +52,7 @@ see "https://ubuntu.flowconsult.at/linux/ocr-tesseract-text-recognition-ubuntu-1
 ## 4. set up modules to node js
 PickPic_Server use variable modules for ndoe js, so you need to set up modules for nodejs.
     
+    cd PickPic_server/nodeserver
     npm install
 
 # PickPic Client
